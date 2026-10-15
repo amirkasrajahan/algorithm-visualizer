@@ -28,4 +28,11 @@ export const algorithms: Algorithm[] = [
     complexity: 'O(n²)',
     description: 'Repeatedly swaps adjacent out-of-order pairs so the largest values bubble to the end.',
   },
+  {
+    id: 'linked-list-traversal',
+    name: 'Linked List Traversal',
+    video: 'videos/LinkedListTraversal.mp4',
+    complexity: 'O(n)',
+    description: 'Follows each node\'s next pointer from the head until it reaches NULL.',
+  },
 ]

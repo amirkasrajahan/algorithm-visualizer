@@ -15,6 +15,7 @@ SCENES=(
   "algorithms/linear_search.py LinearSearch"
   "algorithms/binary_search.py BinarySearch"
   "algorithms/bubble_sort.py BubbleSort"
+  "algorithms/linked_list.py LinkedListTraversal"
 )
 
 for entry in "${SCENES[@]}"; do
