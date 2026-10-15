@@ -35,4 +35,11 @@ export const algorithms: Algorithm[] = [
     complexity: 'O(n)',
     description: 'Follows each node\'s next pointer from the head until it reaches NULL.',
   },
+  {
+    id: 'linked-list-insertion',
+    name: 'Linked List Insertion',
+    video: 'videos/LinkedListInsertion.mp4',
+    complexity: 'O(n) to find, O(1) to link',
+    description: 'Links the new node forward first, then points the previous node at it, so no part of the list is lost.',
+  },
 ]
