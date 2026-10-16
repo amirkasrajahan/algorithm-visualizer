@@ -52,3 +52,37 @@ class StackPush(Scene):
 
         self.play(Indicate(boxes[-1]))
         self.wait(1.5)
+
+
+class StackPop(Scene):
+    def construct(self):
+        title = Text("Stack: Pop", font_size=40).to_edge(UP)
+        complexity_label = Text("pop: O(1)", font_size=28).to_edge(DOWN)
+        lifo = Text("Last In,\nFirst Out", font_size=28, color=YELLOW).move_to(LEFT * 4.5)
+        self.play(Write(title), Write(complexity_label), Write(lifo))
+
+        frame = stack_frame(5).move_to(DOWN * 0.5)
+        self.play(Create(frame))
+
+        values = [4, 8, 15, 23]
+        boxes = [make_box(v).move_to(slot(frame, k)) for k, v in enumerate(values)]
+        top = pointer("top", BLUE, RIGHT).next_to(boxes[-1], RIGHT, buff=0.1)
+        self.play(*[FadeIn(b) for b in boxes], FadeIn(top))
+
+        for _ in range(2):
+            popped = values.pop()
+            box = boxes.pop()
+            op = Text(f"pop() -> {popped}", font_size=32, color=YELLOW).move_to(RIGHT * 4.5 + UP * 1.5)
+            self.play(Write(op), box[0].animate.set_fill(YELLOW, opacity=0.6), run_time=0.6)
+
+            # the top box lifts out and `top` drops to the new top
+            new_top = slot(frame, len(boxes) - 1) + RIGHT * 0.7
+            self.play(
+                box.animate.move_to(frame.get_top() + UP * 0.6),
+                top.animate.next_to(new_top, RIGHT, buff=0.1),
+            )
+            self.play(box.animate.move_to(RIGHT * 4.5 + UP * 0.2))
+            self.play(FadeOut(box), FadeOut(op), run_time=0.5)
+
+        self.play(Indicate(boxes[-1]))
+        self.wait(1.5)
