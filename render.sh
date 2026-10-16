@@ -17,6 +17,10 @@ SCENES=(
   "algorithms/bubble_sort.py BubbleSort"
   "algorithms/linked_list.py LinkedListTraversal"
   "algorithms/linked_list.py LinkedListInsertion"
+  "algorithms/stack.py StackPush"
+  "algorithms/stack.py StackPop"
+  "algorithms/stack.py ValidParentheses"
+  "algorithms/stack.py InvalidParentheses"
 )
 
 for entry in "${SCENES[@]}"; do
