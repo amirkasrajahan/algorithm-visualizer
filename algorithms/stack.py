@@ -144,3 +144,7 @@ class ValidParentheses(Scene):
             note = Text("stack is empty" if not stack else "stack is not empty", font_size=28)
             self.play(Write(note.next_to(verdict, DOWN)))
         self.wait(1.5)
+
+
+class InvalidParentheses(ValidParentheses):
+    s = "([)]"
