@@ -86,3 +86,61 @@ class StackPop(Scene):
 
         self.play(Indicate(boxes[-1]))
         self.wait(1.5)
+
+
+class ValidParentheses(Scene):
+    s = "{[()]}"
+
+    def construct(self):
+        s = self.s
+        pairs = {")": "(", "]": "[", "}": "{"}
+
+        title = Text("Valid Parentheses", font_size=40).to_edge(UP)
+        complexity_label = Text("Time: O(n)   Space: O(n)", font_size=28).to_edge(DOWN)
+        self.play(Write(title), Write(complexity_label))
+
+        chars = VGroup(*[Text(c, font_size=48) for c in s]).arrange(RIGHT, buff=0.5)
+        chars.move_to(UP * 2.2)
+        frame = stack_frame(4).move_to(DOWN * 0.8)
+        self.play(Write(chars), Create(frame))
+
+        side = LEFT * 4.3 + DOWN * 0.8
+        stack = []  # (opening char, its box, its index in s)
+        failed = False
+        for i, ch in enumerate(s):
+            self.play(chars[i].animate.set_color(YELLOW), run_time=0.3)
+
+            if ch not in pairs:
+                box = make_box(ch, 40).move_to(slot(frame, len(stack)))
+                op = Text(f"push '{ch}'", font_size=28, color=YELLOW).move_to(side)
+                self.play(Write(op), FadeIn(box, shift=DOWN * 0.5))
+                stack.append((ch, box, i))
+                self.play(FadeOut(op), run_time=0.3)
+            elif stack and stack[-1][0] == pairs[ch]:
+                open_ch, box, j = stack.pop()
+                op = Text(f"'{ch}' matches '{open_ch}'", font_size=28, color=GREEN).move_to(side)
+                self.play(Write(op), box[0].animate.set_fill(GREEN, opacity=0.6))
+                self.play(box.animate.shift(RIGHT * 3))
+                self.play(
+                    FadeOut(box), FadeOut(op),
+                    chars[i].animate.set_color(GREEN), chars[j].animate.set_color(GREEN),
+                )
+            else:
+                reason = f"'{ch}' does not match '{stack[-1][0]}'" if stack else f"nothing to match '{ch}'"
+                op = Text(reason, font_size=28, color=RED).move_to(side)
+                shake = [chars[i].animate.set_color(RED), Write(op)]
+                if stack:
+                    shake.append(stack[-1][1][0].animate.set_fill(RED, opacity=0.6))
+                self.play(*shake)
+                failed = True
+                break
+
+        # valid only if no mismatch happened and nothing is left unclosed
+        valid = not failed and not stack
+        verdict = Text("Valid" if valid else "Invalid", font_size=44, color=GREEN if valid else RED)
+        verdict.move_to(RIGHT * 4.2 + DOWN * 0.8)
+        self.play(Write(verdict))
+        if not failed:
+            note = Text("stack is empty" if not stack else "stack is not empty", font_size=28)
+            self.play(Write(note.next_to(verdict, DOWN)))
+        self.wait(1.5)
