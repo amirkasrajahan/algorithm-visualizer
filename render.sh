@@ -15,6 +15,7 @@ SCENES=(
   "algorithms/linear_search.py LinearSearch"
   "algorithms/binary_search.py BinarySearch"
   "algorithms/bubble_sort.py BubbleSort"
+  "algorithms/selection_sort.py SelectionSort"
   "algorithms/linked_list.py LinkedListTraversal"
   "algorithms/linked_list.py LinkedListInsertion"
   "algorithms/stack.py StackPush"

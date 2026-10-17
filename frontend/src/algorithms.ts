@@ -29,6 +29,13 @@ export const algorithms: Algorithm[] = [
     description: 'Repeatedly swaps adjacent out-of-order pairs so the largest values bubble to the end.',
   },
   {
+    id: 'selection-sort',
+    name: 'Selection Sort',
+    video: 'videos/SelectionSort.mp4',
+    complexity: 'O(n²)',
+    description: 'Scans the unsorted part for the smallest value and swaps it into the next position, growing a sorted region from the left.',
+  },
+  {
     id: 'linked-list-traversal',
     name: 'Linked List Traversal',
     video: 'videos/LinkedListTraversal.mp4',
