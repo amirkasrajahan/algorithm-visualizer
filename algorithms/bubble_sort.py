@@ -5,7 +5,6 @@ from manim import *
 
 class BubbleSort(Scene):
     def construct(self):
-        random.seed(1)
         values = [1, 3, 7, 12, 15, 17, 19, 20, 25, 35]
         random.shuffle(values)
 
