@@ -20,7 +20,46 @@ def slot(frame, k):
 def make_box(label, font_size=32):
     return VGroup(Rectangle(width=1.4, height=BOX_H - 0.1), Text(str(label), font_size=font_size))
 
+class evalRPN(Scene):
+    def construct(self):
+        tokens = ["4", "13", "5", "/", "+"]
+        operations = ['+', '-', '/', '*']
 
+        group = VGroup(*[
+            VGroup(Square(side_length=0.8), Text(str(token), font_size=30))
+            for token in tokens
+        ])
+
+        frame = stack_frame(5).move_to(RIGHT * 3)
+        self.play(Create(frame))
+        self.wait(0.5)
+
+        group.arrange(RIGHT).move_to(LEFT * 3)
+        self.play(Create(group))
+        self.wait(0.5)
+
+        cells = list(group)
+        n = len(tokens)
+        current = pointer("Curent", BLUE, DOWN)
+        
+        for i in range(n):
+            current.next_to(cells[i], DOWN, buff=0.1)
+            self.play(current.animate())
+            result = 0
+            token = tokens[i]
+            if token in operations:
+                make_box(token)
+            
+                
+
+            
+
+
+
+
+
+
+    
 class StackPush(Scene):
     def construct(self):
         title = Text("Stack: Push", font_size=40).to_edge(UP)
