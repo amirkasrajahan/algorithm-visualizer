@@ -25,6 +25,10 @@ class evalRPN(Scene):
         tokens = ["4", "13", "5", "/", "+"]
         operations = ['+', '-', '/', '*']
 
+        title = Text("Evaluate Reverse Polish Notation", font_size=36).to_edge(UP)
+        complexity_label = Text("Time: O(n)   Space: O(n)", font_size=28).to_edge(DOWN)
+        self.play(Write(title), Write(complexity_label))
+
         group = VGroup(*[
             VGroup(Square(side_length=0.8), Text(str(token), font_size=30))
             for token in tokens
@@ -43,27 +47,59 @@ class evalRPN(Scene):
         current = pointer("Current", BLUE, DOWN).next_to(cells[0], DOWN, buff=0.1)
         self.play(FadeIn(current))
 
-        # twin lists: stack[k] is the token in slot k, boxes[k] is the box drawn there
+        # twin lists: stack[k] is the number in slot k, boxes[k] is the box drawn there
         stack = []
         boxes = []
 
         for i in range(n):
             self.play(current.animate.next_to(cells[i], DOWN, buff=0.1), run_time=0.3)
+            token = tokens[i]
 
-            # a new box starts on top of its token, then slides to the next free slot
-            box = make_box(tokens[i]).move_to(cells[i])
-            self.play(box.animate.move_to(slot(frame, len(stack))))
-            stack.append(tokens[i])
-            boxes.append(box)
+            if token not in operations:
+                # a number: its box starts on its token, then slides to the next free slot
+                box = make_box(token).move_to(cells[i])
+                self.play(box.animate.move_to(slot(frame, len(stack))))
+                stack.append(int(token))
+                boxes.append(box)
+                continue
 
-        self.wait(0.5)
+            # an operator: the top box is b (right side), the one below it is a (left side)
+            b, a = stack.pop(), stack.pop()
+            b_box, a_box = boxes.pop(), boxes.pop()
 
-        # test: remove the top two, the way an operator will (pop from both lists)
-        for _ in range(2):
-            stack.pop()
-            self.play(FadeOut(boxes.pop()))
+            if token == '+':
+                result = a + b
+            elif token == '-':
+                result = a - b
+            elif token == '*':
+                result = a * b
+            else:
+                result = int(a / b)
 
-        self.wait(1)
+            expression = Text(f"{a} {token} {b} = {result}", font_size=36, color=YELLOW)
+            expression.move_to(LEFT * 3 + UP * 1.5)
+            self.play(
+                cells[i][0].animate.set_fill(YELLOW, opacity=0.7),
+                a_box[0].animate.set_fill(BLUE, opacity=0.6),
+                b_box[0].animate.set_fill(YELLOW, opacity=0.6),
+                Write(expression),
+            )
+            self.play(FadeOut(a_box), FadeOut(b_box), run_time=0.5)
+
+            # the result takes the slot that a used to occupy
+            result_box = make_box(result).move_to(slot(frame, len(stack)))
+            self.play(
+                FadeIn(result_box),
+                FadeOut(expression),
+                cells[i][0].animate.set_fill(WHITE, opacity=0),
+            )
+            stack.append(result)
+            boxes.append(result_box)
+
+        # the answer is the one number left in the stack
+        answer = Text(f"answer = {stack[-1]}", font_size=36, color=GREEN).move_to(LEFT * 3 + UP * 1.5)
+        self.play(boxes[-1][0].animate.set_fill(GREEN, opacity=0.6), Write(answer))
+        self.wait(1.5)
 
 
 class StackPush(Scene):
