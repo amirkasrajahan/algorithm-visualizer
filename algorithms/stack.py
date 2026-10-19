@@ -22,7 +22,7 @@ def make_box(label, font_size=32):
 
 class evalRPN(Scene):
     def construct(self):
-        tokens = ["4", "13", "5", "/", "+"]
+        tokens = ["4", "13","-","8","*", "5", "/", "12","+"]
         operations = ['+', '-', '/', '*']
 
         title = Text("Evaluate Reverse Polish Notation", font_size=36).to_edge(UP)
@@ -30,7 +30,7 @@ class evalRPN(Scene):
         self.play(Write(title), Write(complexity_label))
 
         group = VGroup(*[
-            VGroup(Square(side_length=0.8), Text(str(token), font_size=30))
+            VGroup(Square(side_length=0.6), Text(str(token), font_size=30))
             for token in tokens
         ])
 
@@ -38,7 +38,7 @@ class evalRPN(Scene):
         self.play(Create(frame))
         self.wait(0.5)
 
-        group.arrange(RIGHT).move_to(LEFT * 3)
+        group.arrange(RIGHT, buff=0.1).move_to(LEFT * 3)
         self.play(Create(group))
         self.wait(0.5)
 
