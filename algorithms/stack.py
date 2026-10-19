@@ -40,26 +40,32 @@ class evalRPN(Scene):
 
         cells = list(group)
         n = len(tokens)
-        current = pointer("Curent", BLUE, DOWN)
-        
+        current = pointer("Current", BLUE, DOWN).next_to(cells[0], DOWN, buff=0.1)
+        self.play(FadeIn(current))
+
+        # twin lists: stack[k] is the token in slot k, boxes[k] is the box drawn there
+        stack = []
+        boxes = []
+
         for i in range(n):
-            current.next_to(cells[i], DOWN, buff=0.1)
-            self.play(current.animate())
-            result = 0
-            token = tokens[i]
-            if token in operations:
-                make_box(token)
-            
-                
+            self.play(current.animate.next_to(cells[i], DOWN, buff=0.1), run_time=0.3)
 
-            
+            # a new box starts on top of its token, then slides to the next free slot
+            box = make_box(tokens[i]).move_to(cells[i])
+            self.play(box.animate.move_to(slot(frame, len(stack))))
+            stack.append(tokens[i])
+            boxes.append(box)
+
+        self.wait(0.5)
+
+        # test: remove the top two, the way an operator will (pop from both lists)
+        for _ in range(2):
+            stack.pop()
+            self.play(FadeOut(boxes.pop()))
+
+        self.wait(1)
 
 
-
-
-
-
-    
 class StackPush(Scene):
     def construct(self):
         title = Text("Stack: Push", font_size=40).to_edge(UP)
