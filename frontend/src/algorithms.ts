@@ -77,4 +77,11 @@ export const algorithms: Algorithm[] = [
     complexity: 'O(n) time, O(n) space',
     description: 'The same scan on "([)]": the closing bracket meets the wrong opener on top of the stack, so the string is rejected.',
   },
+  {
+    id: 'evaluate-rpn',
+    name: 'Evaluate Reverse Polish Notation',
+    video: 'videos/evalRPN.mp4',
+    complexity: 'O(n) time, O(n) space',
+    description: 'Pushes numbers onto the stack; each operator pops the top two, applies the operation (the second from the top is the left side), and pushes the result.',
+  },
 ]

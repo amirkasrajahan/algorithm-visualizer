@@ -22,6 +22,7 @@ SCENES=(
   "algorithms/stack.py StackPop"
   "algorithms/stack.py ValidParentheses"
   "algorithms/stack.py InvalidParentheses"
+  "algorithms/stack.py evalRPN"
 )
 
 for entry in "${SCENES[@]}"; do
